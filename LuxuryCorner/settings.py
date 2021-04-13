@@ -124,5 +124,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/images/uploaded/'
 MEDIA_ROOT = BASE_DIR
-API_KEY = 'test_3fad62a7db481b6c9e4125e4d9a'
-AUTH_TOKEN = 'test_4dd1292e29d6a8eca048f41943d'
+API_KEY = 'Your key'
+AUTH_TOKEN = 'your token'
