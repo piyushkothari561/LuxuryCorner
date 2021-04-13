@@ -1,0 +1,68 @@
+{% extends "./common.html" %}
+{% load product_tags %}
+{% load humanize %}
+ {% block content %}
+  <style>
+  img {
+  
+    width:  80px;
+    height: 80px;
+    object-fit: scale-down;
+}
+
+
+</style>
+<div class="container mt-5 mb-5">
+        <div class="table-responsive">
+            <table class="table table-hover table-stripped ">
+                <thead>
+                    <tr>
+                        <th scope="col"><p class="text-center">No.</p></th>
+                        <th scope="col"><p class="text-center">Product</p></th>
+                        <th scope="col"></th>
+                        <th scope="col"><p class="text-center">Size</p></th>
+                        <th scope="col"><p class="text-center">Price</p></th>
+                        <th scope="col"><p class="text-center">Discount</p></th>
+                        <th scope="col"><p class="text-center">Sale Price</p></th>
+                        <th scope="col"><p class="text-center">Quantity</p></th>
+                        <th scope="col"><p class="text-center">Total</p></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+           
+                        {% for c in cart %}
+                        <tr>
+                            <td><p class="text-center">{{ forloop.counter }}</p></td>
+                            <td><p class="text-center"><img class="img rounded border border-dark" src='{{ c.product.image.url }}'/></p></td>
+                            <td><p class="text-start fw-bold ">{{ c.product.name | title  }}</p></td>
+                            <td><h7><p class="text-center">{{c.size.size}}</p></h7></td>
+                            <td><h7><p class="text-center">{{c.size.price | intcomma | usd }} </p></h7></td>
+                            <td><h7><p class="text-center">{{c.product.discount}}% </p></h7></td>
+                            <td><h7><p class="text-center">{% clc_sale_price c.size.price c.product.discount as sale_price %}{{sale_price | intcomma | usd }}</p></h7></td>
+                            <td><h7><p class="text-center">{{c.quantity}}</p></h7></td>
+                            <td><h7><p class="text-center">{% multiply c.quantity sale_price as total %}{{total | intcomma  | usd }}</p></h7></td>
+                        </tr>
+
+                        {% endfor %}
+
+                    <tfoot>
+                        <tr>
+                            <th colspan="3"></th>
+                            <th colspan="5">Payable Amount :</th>
+                            <th><p class="text-center">{{ cart|cal_total_payable_amount | intcomma | usd }}</p></th>
+                        </tr>
+                        <tr>
+                            <th colspan="7"></th>
+                            <th colspan="1"><a href="{% url 'deleteCart' %}"  class="btn btn-outline-danger fw-bold d-grid gap-2 d-md-block">Clear Cart</a></th>
+                            <th colspan="1"><a href="/checkout"  class="btn btn-outline-dark fw-bold d-grid gap-2 d-md-block">Continue to Checkout</a></th>
+                        </tr>
+                    </tfoot>
+                </tbody>
+            </table>
+            
+        </div>
+    </div>
+
+ 
+  {% endblock %}

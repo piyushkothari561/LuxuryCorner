@@ -1,0 +1,57 @@
+{% extends "./common.html" %} {% load crispy_forms_tags %} {% block content %} {% load humanize %}
+
+<div class="container">
+  {% load product_tags%}
+
+  <div class="p-2">
+    <div class="display-5">Checkout Page</div>
+    <hr />
+    <div class="row">
+      <div class="col-md-6 border rounded p-3">
+        <form action="/checkout/" method="POST">
+          {% csrf_token %} {{ form|crispy }}
+
+          <hr />
+          <div class="mb-3 text-center fw-bold">
+            <input
+              type="submit"
+              value="CheckOut"
+              class="btn btn-outline-dark fw-bold"
+            />
+          </div>
+        </form>
+      </div>
+
+      <div class="col-md-6">
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Product</th>
+              <th>Size</th>
+              <th>Sale Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in cart %}
+            <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{c.size.product.name}}</td>
+              <td>{{c.size.size}}</td>
+              <td>
+                {% clc_sale_price c.size.price c.size.product.discount as result %} {{result| intcomma | usd}}
+              </td>
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+
+        <hr />
+        <div>
+          <div class="display-5 alert text-center  fw-bold text-secondary">Total Payable Amount : {{cart|cal_total_payable_amount| intcomma | usd}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

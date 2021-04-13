@@ -1,0 +1,66 @@
+{% extends "./common.html" %}
+{% load humanize %}
+{% load product_tags %}
+
+ {% block content %}  <p>
+<style>
+
+</style>
+<script>
+
+</script>
+<div class="container mt-5 mb-5">
+    <div class="row g-2">
+        <div class="col-md-6 d-flex justify-content-center bg-light">
+            <div class="p-4 m-3">
+                <div class="text-center border border-dark">
+                    <img src="{{product.image.url}}" class="img-fluid" style="width:31rem;">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6  ">
+        <br><br>
+            <div class=" ">
+                <div class="display-4"> {{product | title }}</div><hr>
+                    <h2><span class="badge bg-dark">{{product.brand}} </span></h2><hr>
+                    <p>About {{product.category}} : </p>
+                    <p class="fst-italic"> {{product.description | title}}</p>
+                </div><hr>
+                        <div class="row"> 
+                        <div class="col-md-6">
+                        <label class=" " for=""> Select Size: </label>
+                                                <div class="row"> 
+                                                {% for size in product.sizevariant_set.all %}
+                                                <div class="m-2">
+                                                <a href="/product/{{product.slug}}?size={{size.size}}" 
+                                                class ="col-4 btn border border-dark  d-grid mx-auto btn-{% get_active_size_button_class active_size size %} ">
+                                                
+                                                {{size.size}}
+                                                </a>
+                                                </div> 
+                                                <div>
+                                                
+                                                </div>   
+                                                {% endfor%}                                           
+                                                </div>
+                                               
+
+                         </div>
+                        <div class="col-md-6 rounded mt-3">
+                        <div class="mt-2">
+                        <div class="display-5 text-center text-danger fw-bold">
+                                                 {{product.discount}}% OFF
+                                                </div>
+                         <div class="text-center">
+                           <h3> <span class="badge bg-danger fw-bold" ></span></h3>
+                            <h1><span class="badge bg-success fw-bold mb-2"><del>{{price | intcomma | usd}}</del> {{sell_price | intcomma | usd}}</span></h1>
+                        </div>
+                        <a href="/addtocart/{{product.slug}}/{{active_size.size}}?return_url={{request.get_full_path}}" class="btn  btn-outline-dark fw-bold d-grid"> Add to Cart</a>
+                                                                        
+                        </div>
+                         </div>
+                        </div>
+            </div>
+    </div>
+</div>
+ </p> {% endblock %}

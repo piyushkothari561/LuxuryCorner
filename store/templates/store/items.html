@@ -1,0 +1,182 @@
+{% extends "./common.html" %} {% load product_tags %} {% load static %} {% load filter_tags %} {% block content %} {% load humanize %}
+<style>
+  .card {
+    width: 100%;
+    border: none;
+    height: 350px;
+    max-width: 350px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    transition: all ease 0.4s;
+  }
+
+  .card img {
+    transition: all ease 0.4s;
+  }
+
+  .card:hover img {
+    margin-top: -80px;
+  }
+
+  .card .content {
+    width: 100%;
+    background: #fff;
+    position: absolute;
+    bottom: -60%;
+    transition: all ease 0.5s;
+    border-radius: 4px;
+    box-shadow: 0px -3px 4px rgba(10, 10, 10, 0.09);
+  }
+
+  .card .content .category {
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .category2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .card .content .price {
+    font-size: 17px;
+    font-weight: 500;
+    color: #000000;
+  }
+
+  .card .content p {
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+  .card:hover .content {
+    bottom: 0%;
+  }
+
+  .buttons button {
+    border-radius: 1px;
+    margin-bottom: 10px;
+    transition: all ease 0.3s;
+  }
+
+  .content {
+    padding: 10px;
+  }
+</style>
+<link rel="icon" href="data:,">
+
+<div class="container-fluid  mt-5 mb-5" >
+  <div class="row m-1"> 
+    <div class="col-md-2">
+      
+              <form id='filterForm' class="border border-secondary" action="/items">
+        <!-- Filter div -->
+      <div>
+ <!--brands-->
+       <div class="p-2 text-center">
+            <label for="brand">Brand</label>
+            <select onchange="submitForm()" name='brand' class="form-select fw-bold" id="brands">
+              <option value="">Select Brand</option>
+              {% for brand in brands%}
+              <option class="fw-bold text-center" {% selected_attr request.GET.brand brand.slug %} value="{{brand.slug}}">{{brand.title}}</option>
+              {%endfor%}
+            </select>
+        </div>
+
+          <!-- Category -->
+        <div class="p-2 text-center">
+            <label for="category">Category</label>
+            <select onchange="submitForm()" name='category' class="form-select fw-bold" id="category">
+              <option value="">Select Category</option>
+              {% for item in category %}
+              <option class="fw-bold text-center" {% selected_attr request.GET.category item.slug %} value="{{item.slug}}">{{item.title}}</option>
+              {%endfor%}
+            </select>
+        </div>
+
+          <!-- Gender -->
+        <div class="p-2 text-center">
+            <label for="gender">Gender</label>
+            <select onchange="submitForm()" name="gender" class="form-select fw-bold" id="gender">
+              <option value="">Select Gender</option>
+              {% for item in gender%}
+              <option class="fw-bold text-center" {% selected_attr request.GET.gender item.slug %} value="{{item.slug}}">{{item.title}}</option>
+              {%endfor%}
+            </select>
+        </div>
+          <!-- Colors -->
+        <div class="p-2 text-center">
+            <label for="colour">Colors</label>
+            <select onchange="submitForm()" name="colour" class="form-select fw-bold" id="colour">
+              <option value="">Select Colors</option>
+              {% for item in colour%}
+              <option class="fw-bold text-center" {% selected_attr request.GET.colour item.slug %} value="{{item.slug}}">{{item.title}}</option>
+              {%endfor%}
+            </select>
+        </div>
+
+        <div class="text-center m-2 p-2">
+        <a href="/items" class="btn border border-danger text-danger fw-bold btn-sm">Clear Filter</a>
+        </div>
+    </div>
+      </form>
+  </div>
+       <div class="col-md-10">
+         <div class="row g-2">
+    {%for product in page_object %}
+
+    <div class="col-md-3 p-2 d-flex justify-content-center">
+      <div class="card border border-dark bg-light">
+        <div class="text-center">
+          <img src="{{product.image.url}}" class="img-fluid" width="220" />
+        </div>
+        <div class="content">
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="category"> {{product.brand}}</span>
+            <span class="price"
+              ><del>{% min_price product as res %} {{ res | usd}}</del>
+              {%sale_price product as rea%} {{rea | intcomma | usd}}</span
+            >
+          </div>
+
+          <span class="category2">{{product|title }}</span>
+          <hr />
+          <div class="buttons d-flex justify-content-center">
+            <a href="/product/{{product.slug}}" class="btn btn-dark"
+              >View More</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  <nav aria-label="Page navigation"  class="mt-2">
+  <ul class="pagination justify-content-center">
+            {% if page_object.has_previous %}
+            <li class="page-item"><a class="page-link text-dark" href="?{{pageurl}}">&laquo; first</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?{{pageurl}}{{ page_object.previous_page_number }}">previous</a></li>
+        {% endif %}
+
+          <li class="page-item">
+            <a class="page-link text-dark" href="">Page {{ page_object.number }} of {{ page_object.paginator.num_pages }}.</a>
+          </li>
+
+            {% if page_object.has_next %}
+            <li class="page-item"><a class="page-link text-dark" href="?{{pageurl}}{{ page_object.next_page_number }}">next</a></li>
+            <li class="page-item"><a class="page-link text-dark" href="?{{pageurl}}{{ page_object.paginator.num_pages }}">last &raquo;</a></li>
+        {% endif %}
+  </ul>
+</nav>
+
+       </div>
+     </div>
+
+</div>
+<script src='{% static "store/js/home.js" %}'></script>
+
+
+
+{% endblock %}
