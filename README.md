@@ -1,7 +1,4 @@
 
-
-
-Abstract
 LUXURY CORNER is an ecommerce website made by Piyush Kothari in the year 2020/2021 for the luxuriant trend industry. The objective was to be the foremost platform for business in luxury fashion in India which includes apparels, footwear, bags, and accessories from specific high-end designers using the modern world technologies like rapid data analysis for swift alteration, sustainability, internet of things, among others. More the interface is friendly to the customers and easily navigable, the richness of products will just make them more attracted to the services provided by the platform. Digitising the company on various platform with targeted audience also assists to the growth of a brand. With implementation of new tech features on the ecommerce website eases the online customers to interact with the website. With a right product and customer model the company will try to attain affluence over the exclusive fashion market.
 
 Website: http://piyush561.pythonanywhere.com/
